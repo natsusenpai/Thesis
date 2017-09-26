@@ -10,5 +10,5 @@ Last project in school
 ## General Infomation:
     VM's IP: 192.168.10.10 (my birthday haha).
     MongoDB external port: 27017
-- To Build up varant machine run this command under **Thesis/devops/** folder: _vagrant up --provision_
+- To Build up varant machine run this command under **Thesis/app/devops/** folder: _vagrant up --provision_
 - Test MongoDB connection: _mongo 192.168.10.10:27017_
