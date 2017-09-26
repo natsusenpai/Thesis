@@ -3,7 +3,7 @@ Last project in school
 
 # Music Video Connector
 
-## Requirement: 
+## Requirement (_till now_): 
     Vagrant
     Docker
     MongoDB clients    
