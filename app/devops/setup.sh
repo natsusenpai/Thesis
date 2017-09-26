@@ -3,8 +3,16 @@
 ###################################################################
 # ATTENTION: This script is supposed to run under root privilege
 ###################################################################
+
+
+
 USER=$1
 echo "I am $USER"
+
+function execAsUser {
+  su -m $USER -c "$1" # use -m to avoid full login so that we don't trigger .profile when provisioning
+}
+
 echo "Adjust timezone to VN"
 rm /etc/localtime
 ln -s /usr/share/zoneinfo/Asia/Ho_Chi_Minh /etc/localtime
@@ -13,6 +21,7 @@ echo "Etc/GMT+7" | tee /etc/timezone > /dev/null
 echo "###########################"
 echo "#   INSTALLING DOCKER CE  #"
 echo "###########################"
+echo "Ref: https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/"
 
 echo "Update apt package index 1/3"
 apt-get -y update 
@@ -48,7 +57,29 @@ apt-get -y install docker-ce=17.06.0~ce-0~ubuntu
 echo "Running \"Hello World\" image to verify that Docker is successfully installed"
 docker run hello-world
 if [ $? -eq 0 ]; then
-    echo "CONGRATULATION! DOCKER WAS SUCCESSFULLY INSTALLED!"
+    success_flag="Docker"
 else
-    echo "ERROR! DOCKER WAS NOT SUCCESSFULLY INSTALLED!"
+    unsuccess_flag="Docker"
 fi
+
+echo "###########################"
+echo "#    INSTALLING FFMPEG    #"
+echo "###########################"
+echo "Ref: https://www.faqforge.com/linux/how-to-install-ffmpeg-on-ubuntu-14-04/"
+
+echo "Add the mc3man ppa"
+add-apt-repository ppa:mc3man/trusty-media -y
+
+echo "Update apt package index 1/1"
+apt-get -y update
+apt-get -y dist-upgrade
+
+echo "Installing FFMPEG..."
+apt-get install ffmpeg
+if [ $? -eq 0 ]; then
+    success_flag="${success_flag}, FFMPEG"
+else
+    unsuccess_flag="${unsuccess_flag}, FFMPEG"
+fi
+
+
