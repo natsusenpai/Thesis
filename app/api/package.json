@@ -1,0 +1,32 @@
+{
+  "name": "musicplayerconnector",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Phu Ha Truong, Phu Thinh Nguyen.",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.5.0",
+    "bcrypt": "^1.0.2",
+    "body-parser": "^1.17.2",
+    "dotenv": "^4.0.0",
+    "ejs": "^2.5.6",
+    "express": "^4.15.3",
+    "express-session": "^1.15.5",
+    "js-yaml": "^3.9.0",
+    "lodash": "^4.17.4",
+    "moment": "^2.18.1",
+    "morgan": "^1.8.2",
+    "mongodb": "^2.2.30",
+    "mongoose": "^4.11.13",
+    "passport": "^0.3.2",
+    "passport-google-oauth20": "^1.0.0",
+    "passport-jwt": "^2.2.1",
+    "path": "^0.12.7",
+    "winston": "^2.3.1",
+    "yargs": "^8.0.1"
+  }
+}
