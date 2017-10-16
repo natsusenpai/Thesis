@@ -1,39 +1,46 @@
-var MongoClient = require('mongodb').MongoClient
-, assert = require('assert');
+// server.js
 
-// Connection URL 
-var url = 'mongodb://192.168.10.10:27017/test';
-// Use connect method to connect to the Server 
-MongoClient.connect(url, function(err, db) {
-assert.equal(null, err);
-
+// set up ======================================================================
+// get all the tools we need
+var express  = require('express');
+var app      = express();
+var port     = process.env.PORT || 8080;
 var mongoose = require('mongoose');
-mongoose.connect(url);
+var passport = require('passport');
+var flash    = require('connect-flash');
 
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-    var kittySchema = mongoose.Schema({
-        name: String
-    });
+var morgan       = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser   = require('body-parser');
+var session      = require('express-session');
 
-    var Kitten = mongoose.model('Kitten', kittySchema);
-    var silence = new Kitten({ name: 'Helo~' });
-    console.log(silence.name); // 'Silence'
+var configDB = require('./config/database.js');
+// configuration ===============================================================
+mongoose.connect(configDB.url); // connect to our database
 
-});
+require('./config/passport')(passport); // pass passport for configuration
 
-console.log("Connected correctly to server");
+// set up our express application
+app.use(morgan('dev')); // log every request to the console
+app.use(cookieParser()); // read cookies (needed for auth)
+app.use(bodyParser.json()); // get information from html forms
+app.use(bodyParser.urlencoded({ extended: true }));
 
-// document={
-//     title: 'MongoDB Overview', 
-//     description: 'MongoDB is no sql database',
-//     by: 'tutorials point',
-//     url: 'http://www.tutorialspoint.com',
-//     tags: ['mongodb', 'database', 'NoSQL'],
-//     likes: 100
-// };
+app.set('view engine', 'ejs'); // set up ejs for templating
+app.set('views','./app/views/');
+// required for passport
+app.use(session({
+    secret: 'ilovescotchscotchyscotchscotch', // session secret
+    resave: true,
+    saveUninitialized: true
+}));
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash()); // use connect-flash for flash messages stored in session
 
-// db.test.insert(document);
-// db.test.find().pretty();
-});
+// routes ======================================================================
+require('./app/routes/auth-routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
+
+// launch ======================================================================
+app.listen(port);       
+console.log('The magic happens on port ' + port);
