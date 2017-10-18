@@ -1,5 +1,5 @@
 
-use musicvideoconnector;
+use musicplayerconnector;
 
 db.createUser(
    {
