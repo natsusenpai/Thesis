@@ -32,7 +32,7 @@ module.exports = function(app, passport) {
     // email gets their emails
     app.get('/auth/google', 
         passport.authenticate('google', { 
-            scope : ['profile', 'email'], 
+            scope : ['profile', 'email'] 
         })
     );
 
@@ -40,7 +40,7 @@ module.exports = function(app, passport) {
     app.get('/auth/google/callback',
         passport.authenticate('google', {
             successRedirect : '/profile',
-            failureRedirect : '/',
+            failureRedirect : '/'
         })
     );
 

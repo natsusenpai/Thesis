@@ -28,19 +28,14 @@ module.exports = function(passport) {
         function(accessToken, refreshToken, profile, done) {
             // make the code asynchronous
             // User.findOne won't fire until we have all our data back from Google
-            process.nextTick(function() {
-                User.findOne({ 'google.id' : profile.id }, function(err, user) {
-                    if (err)  throw err;
-                    if (user) return done(null, user);
-                    else {
-                        let newUser = new User();
-                        newUser.createAuthGoogle(accessToken, refreshToken, profile, (err) => {
-                            if (err) throw err;
-                            return done(null, newUser);
-                        });
-                    }
-                });
-            }) 
+            User.findOne({ 'google.id' : profile.id }, function(err, user) {
+                if (err)  throw err;
+                if (user) return done(null, user);
+                else {
+                    let newUser = new User();
+                    newUser.createAuthGoogle(accessToken, refreshToken, profile, done);
+                }
+            });
         }
     ));
 }

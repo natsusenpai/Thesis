@@ -38,14 +38,15 @@ authSchema.methods.validPassword = function(password) {
 };
 
 // create a new GOOGLE identity
-authSchema.methods.createAuthGoogle = function(accessToken, refreshToken, profile) {
+authSchema.methods.createAuthGoogle = function(accessToken, refreshToken, profile, callback) {
     this.google.id    = profile.id;
     this.google.token = accessToken;
     this.google.name  = profile.displayName;
     this.google.email = profile.emails[0].value; // pull the first email
 
-    return this.save((err) => {
-        if (err) throw err;
+    return this.save((err, result) => {
+        if (err) return callback(err);
+        callback(null, result);
     });    
 };
 
@@ -55,3 +56,4 @@ authSchema.methods.createAuthGoogle = function(accessToken, refreshToken, profil
 
 // create the model for users and expose it to our app
 module.exports = mongoose.model('User', authSchema);
+
